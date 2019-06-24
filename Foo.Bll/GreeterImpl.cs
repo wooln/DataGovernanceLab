@@ -12,6 +12,8 @@ namespace Foo.Bll
         // Server side handler of the SayHello RPC
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
         {
+            Console.WriteLine($"Clled {nameof(this.SayHello)} from {context?.Peer}, name:{request?.Name}");
+            
             return Task.FromResult(new HelloReply { Message = "Hello " + request.Name });
         }
     }

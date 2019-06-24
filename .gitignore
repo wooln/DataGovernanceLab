@@ -78,3 +78,4 @@ ModelManifest.xml
 
 .vs/
 App_Data/
+.DS_Store
