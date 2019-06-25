@@ -45,6 +45,12 @@
     <Reference Include="Grpc.Core.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d754f35622e28bad, processorArchitecture=MSIL">
       <HintPath>..\packages\Grpc.Core.Api.1.21.0\lib\net45\Grpc.Core.Api.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Interactive.Async, Version=3.2.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
@@ -56,6 +62,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZooKeeperNet, Version=3.4.6.1, Culture=neutral, PublicKeyToken=fefd2c046da35b56, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZooKeeper.Net.3.4.6.2\lib\net40\ZooKeeperNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -69,6 +78,10 @@
     <ProjectReference Include="..\Foo.Contracts\Foo.Contracts.csproj">
       <Project>{5086e55e-cd29-40a2-9a32-7349438f0973}</Project>
       <Name>Foo.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Library.ServiceTool\Library.ServiceTool.csproj">
+      <Project>{d21e7eaf-e4ca-4c4f-9f4a-cf2aef2f95e0}</Project>
+      <Name>Library.ServiceTool</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

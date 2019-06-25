@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Foo.Contracts;
 using Grpc.Core;
+using Library.ServiceTool;
 
 namespace Foo.Services.Client
 {
@@ -12,9 +13,14 @@ namespace Foo.Services.Client
     {
         static void Main(string[] args)
         {
+            //服务发现
+            string serviceKey = "Foo.Services";
+            ServiceInformation service = ServiceBus.Get(serviceKey).FeelingLucky();
+
             while (true)
             {
-                Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
+                string target = $"{service.Host}:{service.Port}";
+                Channel channel = new Channel(target, ChannelCredentials.Insecure);
                 var client = new Greeter.GreeterClient(channel);
 
                 Console.Write("Input your name: ");
