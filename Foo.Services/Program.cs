@@ -4,8 +4,8 @@ using Grpc.Core;
 using Foo.Bll;
 using Foo.Contracts;
 using Library.ServiceTool;
-using ZooKeeperNet;
-
+using Library.ServiceTool.Util;
+using Rabbit.Zookeeper;
 
 namespace Foo.Services
 {
@@ -13,10 +13,10 @@ namespace Foo.Services
     {
         static void Main(string[] args)
         {
-            StartService("127.0.0.1", 50051);
+            StartService("127.0.0.1", 50051).Await();
         }
 
-        private static void StartService(string host, int port)
+        private static async Task StartService(string host, int port)
         {
             //服务信息
             var serviceInfo = new ServiceInformation()
@@ -37,7 +37,7 @@ namespace Foo.Services
             };
             service.Start();
 
-            using (ZooKeeper zon = ServiceBus.Register(serviceInfo))
+            using (IZookeeperClient zon = await ServiceBus.Register(serviceInfo))
             {
                 Console.WriteLine("Greeter server listening on port " + port);
                 Console.WriteLine("Press any key to stop the server...");

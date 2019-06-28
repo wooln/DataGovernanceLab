@@ -1,90 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Org.Apache.Zookeeper.Data;
-using ZooKeeperNet;
+using org.apache.zookeeper;
+using org.apache.zookeeper.data;
+using Rabbit.Zookeeper;
+using Rabbit.Zookeeper.Implementation;
 
 namespace Library.ServiceTool
 {
     public class ServiceBus
     {
-        class InnerWatcher : IWatcher
-        {
-            public void Process(WatchedEvent @event)
-            {
-                switch (@event.Type)
-                {
-                    case EventType.None:
-                        break;
-                    case EventType.NodeCreated:
-                        break;
-                    case EventType.NodeDeleted:
-                        break;
-                    case EventType.NodeDataChanged:
-                        break;
-                    case EventType.NodeChildrenChanged:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
         private const string Root = "/service_register";
-        private static readonly InnerWatcher Watcher = new InnerWatcher();
         private static readonly Dictionary<string, ServiceInformationCollection> ServiceInformationDictionary = new Dictionary<string, ServiceInformationCollection>();
 
-        private static ZooKeeper _zooKeeper = null;
+        private static IZookeeperClient _zooKeeper = null;
 
-        private static ZooKeeper GetZooKeeper()
+        private static IZookeeperClient GetZooKeeper()
         {
             if (_zooKeeper == null)
             {
-                _zooKeeper = new ZooKeeper("127.0.0.1:2181", new TimeSpan(0, 0, 0, 50000), new InnerWatcher());
+                _zooKeeper = new ZookeeperClient(new ZookeeperClientOptions("127.0.0.1:2181"));
             }
             return _zooKeeper;
         }
 
-        public static ZooKeeper Register(ServiceInformation service)
+        public static async Task<IZookeeperClient> Register(ServiceInformation service)
         {
             //创建一个Zookeeper实例，第一个参数为目标服务器地址和端口，第二个参数为Session超时时间，第三个为节点变化时的回调方法 
-            var zk = GetZooKeeper();
-            Stat stat = zk.Exists(Root, true);
-
-            ////创建一个节点root，数据是mydata,不进行ACL权限控制，节点为永久性的(即客户端shutdown了也不会消失)
-            //zk.Create(Root, "mydata".GetBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.Persistent);
+            IZookeeperClient zk = GetZooKeeper();
+            bool exists = await zk.ExistsAsync(Root);
+            if (!exists)
+            {
+                await zk.CreatePersistentAsync(Root, GetData("this is service register root"));
+            }
 
             string path = $"{Root}/{service.Key}";
             //todo 先获取后追加
-            try
+            if (await zk.ExistsAsync(path))
             {
-                zk.Delete(path, -1);
+                await zk.DeleteAsync(path);
             }
-            catch (Exception e)
-            {
 
-            }
-            //在root下面创建一个child znode,数据为服务信息,不进行ACL权限控制，节点为暂时的 
-            zk.Create(path, JsonConvert.SerializeObject(new ServiceInformationCollection() { service }).GetBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.Ephemeral);
-
+            //创建一个child znode,数据为服务信息,不进行ACL权限控制，节点为暂时的 
+            await zk.CreateEphemeralAsync(path, GetData(new ServiceInformationCollection() { service }));
             return zk;
         }
 
-        public static ServiceInformationCollection Get(string key)
+        public static async Task<ServiceInformationCollection> Get(string key)
         {
-            return LoadServiceInformation($"{Root}/{key}");
+            return await LoadServiceInformation($"{Root}/{key}");
             //return ServiceInformationDictionary[key];
         }
 
-        private static ServiceInformationCollection LoadServiceInformation(string path)
+        private static async Task<ServiceInformationCollection> LoadServiceInformation(string path)
         {
             var zk = GetZooKeeper();
-            byte[] data = zk.GetData(path, false, null);
+            byte[] data = (await zk.GetDataAsync(path)).ToArray();
 
             string json = Encoding.UTF8.GetString(data);
             var serviceInformation = JsonConvert.DeserializeObject<ServiceInformationCollection>(json);
             return serviceInformation;
+        }
+
+        private static byte[] GetData(object graph)
+        {
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(graph));
         }
     }
 

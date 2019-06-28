@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Foo.Contracts;
 using Grpc.Core;
 using Library.ServiceTool;
+using Newtonsoft.Json;
 
 namespace Foo.Services.Client
 {
@@ -15,7 +16,7 @@ namespace Foo.Services.Client
         {
             //服务发现
             string serviceKey = "Foo.Services";
-            ServiceInformation service = ServiceBus.Get(serviceKey).FeelingLucky();
+            ServiceInformation service = ServiceBus.Get(serviceKey).Result.FeelingLucky();
 
             while (true)
             {
@@ -26,8 +27,12 @@ namespace Foo.Services.Client
                 Console.Write("Input your name: ");
                 String user = Console.ReadLine();
 
-                var reply = client.SayHello(new HelloRequest { Name = user });
-                Console.WriteLine("Greeting: " + reply.Message);
+                var request = new HelloRequest { Name = user };
+                Console.WriteLine($"request: \n{JsonConvert.SerializeObject(request)}");
+
+                var reply = client.SayHello(request);
+                Console.WriteLine($"reply: \n{JsonConvert.SerializeObject(reply)}");
+
                 channel.ShutdownAsync().Wait();
             }
         }

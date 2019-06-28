@@ -1,10 +1,9 @@
 ﻿using System;
 using Foo.Bll;
 using Foo.Contracts;
-using Library.ServiceTool;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Foo.UnitTest
+namespace Foo.Test
 {
     [TestClass]
     public class BllTest
@@ -14,10 +13,9 @@ namespace Foo.UnitTest
         {
             GreeterImpl client = new GreeterImpl();
 
-            Console.Write("Input your name: ");
-            String user = Console.ReadLine();
-
+            string user = "徐云金";
             var reply = client.SayHello(new HelloRequest { Name = user }, null).Result;
+
             Console.WriteLine("Greeting: " + reply.Message);
         }
     }

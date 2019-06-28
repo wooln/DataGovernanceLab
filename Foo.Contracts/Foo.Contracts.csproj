@@ -11,13 +11,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\Foo.Protos\greeter.proto" Link="Contents\greeter.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Grpc.Tools" Version="1.21.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contents\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\Foo.Protos\greeter-interface.proto">
+      <Link>Contents\greeter-interface.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\Foo.Protos\greeter-object.proto">
+      <Link>Contents\greeter-object.proto</Link>
+    </Protobuf>
   </ItemGroup>
 </Project>
