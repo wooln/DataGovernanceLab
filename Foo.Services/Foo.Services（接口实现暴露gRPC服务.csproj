@@ -4,17 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C5DB1F97-5494-42CE-A8FB-0112144C0859}</ProjectGuid>
+    <ProjectGuid>{5A077DB6-F9AD-46F5-B02E-99F5EBC97034}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Foo.Services.Client</RootNamespace>
-    <AssemblyName>Foo.Services.Client</AssemblyName>
+    <RootNamespace>Foo.Services</RootNamespace>
+    <AssemblyName>Foo.Services</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,6 +45,9 @@
     <Reference Include="Grpc.Core.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d754f35622e28bad, processorArchitecture=MSIL">
       <HintPath>..\packages\Grpc.Core.Api.1.21.0\lib\net45\Grpc.Core.Api.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -54,7 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Interactive.Async, Version=3.2.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Interactive.Async.3.2.0\lib\net46\System.Interactive.Async.dll</HintPath>
+      <HintPath>..\packages\System.Interactive.Async.3.2.0\lib\net45\System.Interactive.Async.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -75,14 +78,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Foo.Contracts\Foo.Contracts.csproj">
+    <ProjectReference Include="..\Foo.Bll\Foo.Bll（接口实现）.csproj">
+      <Project>{17bc57d7-a67d-460e-bff9-f8c9200f441c}</Project>
+      <Name>Foo.Bll（接口实现）</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Foo.Contracts\Foo.Contracts（CLR接口契约）.csproj">
       <Project>{5086e55e-cd29-40a2-9a32-7349438f0973}</Project>
-      <Name>Foo.Contracts</Name>
+      <Name>Foo.Contracts（CLR接口契约）</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Library.ServiceTool\Library.ServiceTool.csproj">
+    <ProjectReference Include="..\Library.ServiceTool\Library.ServiceTool（服务注册发现工具）.csproj">
       <Project>{d21e7eaf-e4ca-4c4f-9f4a-cf2aef2f95e0}</Project>
-      <Name>Library.ServiceTool</Name>
+      <Name>Library.ServiceTool（服务注册发现工具）</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Grpc.Core.1.21.0\build\net45\Grpc.Core.targets" Condition="Exists('..\packages\Grpc.Core.1.21.0\build\net45\Grpc.Core.targets')" />

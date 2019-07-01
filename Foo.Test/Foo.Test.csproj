@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Foo.Bll\Foo.Bll.csproj" />
-    <ProjectReference Include="..\Foo.Contracts\Foo.Contracts.csproj" />
-    <ProjectReference Include="..\Library.ServiceTool\Library.ServiceTool.csproj" />
+    <ProjectReference Include="..\Foo.Bll\Foo.Bll（接口实现）.csproj" />
+    <ProjectReference Include="..\Foo.Contracts\Foo.Contracts（CLR接口契约）.csproj" />
+    <ProjectReference Include="..\Library.ServiceTool\Library.ServiceTool（服务注册发现工具）.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Foo.Contracts\Foo.Contracts.csproj" />
+    <ProjectReference Include="..\Foo.Contracts\Foo.Contracts（CLR接口契约）.csproj" />
   </ItemGroup>
 
 </Project>
