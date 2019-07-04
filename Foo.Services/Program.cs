@@ -13,7 +13,22 @@ namespace Foo.Services
     {
         static void Main(string[] args)
         {
-            StartService("127.0.0.1", 50051).Await();
+            int port;
+            if (args.Length > 0)
+            {
+                port = int.Parse(args[0]);
+            }
+            else
+            {
+                port = GetRandomPort(50000, 60000);
+            }
+            StartService("127.0.0.1", port).Await();
+        }
+
+        private static int GetRandomPort(int start, int end)
+        {
+            Random ran = new Random();
+            return ran.Next(start, end);
         }
 
         private static async Task StartService(string host, int port)

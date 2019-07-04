@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using org.apache.zookeeper;
-using org.apache.zookeeper.data;
 using Rabbit.Zookeeper;
 using Rabbit.Zookeeper.Implementation;
 
@@ -16,8 +13,57 @@ namespace Library.ServiceTool
     {
         private const string Root = "/service_register";
         private static readonly Dictionary<string, ServiceInformationCollection> ServiceInformationDictionary = new Dictionary<string, ServiceInformationCollection>();
-
         private static IZookeeperClient _zooKeeper = null;
+
+        public static async Task<IZookeeperClient> Register(ServiceInformation service)
+        { 
+            IZookeeperClient zk = GetZooKeeper();
+            await CheckOrCreateRoot(zk);
+
+            string servicesPath = $"{Root}/{service.Key}";
+
+            //todo 先获取后追加
+            if (!await zk.ExistsAsync(servicesPath))
+            {
+                await zk.CreatePersistentAsync(servicesPath, GetData(string.Empty));
+            }
+
+            string serviceNodePaht = $"{servicesPath}/{service.Host}:{service.Port}";
+            await zk.CreateEphemeralAsync(serviceNodePaht, GetData(service));
+            return zk;
+        }
+
+        public static async Task<ServiceInformationCollection> Get(string key)
+        {
+            return await LoadServiceInformation($"{Root}/{key}");
+            //return ServiceInformationDictionary[key];
+        }
+
+
+        #region private
+
+        private static async Task<ServiceInformationCollection> LoadServiceInformation(string servicesPath)
+        {
+            var zk = GetZooKeeper();
+            IEnumerable<string> nodes  =  await zk.GetChildrenAsync(servicesPath);
+
+            var result = new ServiceInformationCollection();
+            foreach(string nodeName in nodes)
+            {
+                string nodePath = $"{servicesPath}/{nodeName}";
+                byte[] data = (await zk.GetDataAsync(nodePath)).ToArray();
+
+                string json = Encoding.UTF8.GetString(data);
+                var serviceInformation = JsonConvert.DeserializeObject<ServiceInformation>(json);
+                result.Add(serviceInformation);
+            }
+            return result;
+        }
+
+        private static byte[] GetData(object graph)
+        {
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(graph));
+        }
 
         private static IZookeeperClient GetZooKeeper()
         {
@@ -28,52 +74,25 @@ namespace Library.ServiceTool
             return _zooKeeper;
         }
 
-        public static async Task<IZookeeperClient> Register(ServiceInformation service)
+        private static async Task CheckOrCreateRoot(IZookeeperClient zk)
         {
-            //创建一个Zookeeper实例，第一个参数为目标服务器地址和端口，第二个参数为Session超时时间，第三个为节点变化时的回调方法 
-            IZookeeperClient zk = GetZooKeeper();
             bool exists = await zk.ExistsAsync(Root);
             if (!exists)
             {
                 await zk.CreatePersistentAsync(Root, GetData("this is service register root"));
             }
-
-            string path = $"{Root}/{service.Key}";
-            //todo 先获取后追加
-            if (await zk.ExistsAsync(path))
-            {
-                await zk.DeleteAsync(path);
-            }
-
-            //创建一个child znode,数据为服务信息,不进行ACL权限控制，节点为暂时的 
-            await zk.CreateEphemeralAsync(path, GetData(new ServiceInformationCollection() { service }));
-            return zk;
         }
-
-        public static async Task<ServiceInformationCollection> Get(string key)
-        {
-            return await LoadServiceInformation($"{Root}/{key}");
-            //return ServiceInformationDictionary[key];
-        }
-
-        private static async Task<ServiceInformationCollection> LoadServiceInformation(string path)
-        {
-            var zk = GetZooKeeper();
-            byte[] data = (await zk.GetDataAsync(path)).ToArray();
-
-            string json = Encoding.UTF8.GetString(data);
-            var serviceInformation = JsonConvert.DeserializeObject<ServiceInformationCollection>(json);
-            return serviceInformation;
-        }
-
-        private static byte[] GetData(object graph)
-        {
-            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(graph));
-        }
+        #endregion
     }
 
     public class ServiceInformationCollection : List<ServiceInformation>
     {
+        public ServiceInformationCollection() { }
+        public ServiceInformationCollection(IEnumerable<ServiceInformation> items)
+        {
+            this.AddRange(items);
+        }
+
         public ServiceInformation FeelingLucky()
         {
             //todo
