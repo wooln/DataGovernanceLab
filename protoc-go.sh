@@ -1,0 +1,1 @@
+protoc  ./Foo.Protos/*.proto -I ./Foo.Protos/ --go_out=plugins=grpc:./Go/Foo_Contracts
