@@ -96,7 +96,7 @@ namespace Library.ServiceTool
         public ServiceInformation FeelingLucky()
         {
             //todo
-            return this.First();
+            return this.FirstOrDefault();
         }
     }
 

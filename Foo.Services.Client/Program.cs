@@ -17,7 +17,11 @@ namespace Foo.Services.Client
             //服务发现
             string serviceKey = "Foo.Services";
             ServiceInformation service = ServiceBus.Get(serviceKey).Result.FeelingLucky();
-
+            //service = new ServiceInformation()
+            //{
+            //    Host = "localhost",
+            //    Port = 50051,
+            //};
             while (true)
             {
                 string target = $"{service.Host}:{service.Port}";
