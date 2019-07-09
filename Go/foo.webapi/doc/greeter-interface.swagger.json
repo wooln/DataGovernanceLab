@@ -1,0 +1,61 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "greeter-interface.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "ContractsGift": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ContractsHelloReply": {
+      "type": "object",
+      "properties": {
+        "request": {
+          "$ref": "#/definitions/ContractsHelloRequest"
+        },
+        "name": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "title": "The response message containing the greetings"
+    },
+    "ContractsHelloRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "secretSignal": {
+          "type": "string"
+        },
+        "gifts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContractsGift"
+          }
+        }
+      },
+      "description": "The request message containing the user's name."
+    }
+  }
+}

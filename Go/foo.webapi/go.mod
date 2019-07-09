@@ -3,12 +3,13 @@ module foo.webapi
 go 1.12
 
 require (
-	Foo_Contracts v0.0.0-00010101000000-000000000000 // indirect
+	Foo_Contracts v0.0.0-00010101000000-000000000000
 	cloud.google.com/go v0.39.0 // indirect
+	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/mock v1.3.1 // indirect
 	github.com/google/btree v1.0.0 // indirect
 	github.com/google/pprof v0.0.0-20190515194954-54271f7e092f // indirect
-	github.com/grpc-ecosystem/grpc-gateway v1.9.0 // indirect
+	github.com/grpc-ecosystem/grpc-gateway v1.9.0
 	github.com/kr/pty v1.1.4 // indirect
 	go.opencensus.io v0.22.0 // indirect
 	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5 // indirect
@@ -24,7 +25,7 @@ require (
 	golang.org/x/tools v0.0.0-20190606050223-4d9ae51c2468 // indirect
 	google.golang.org/appengine v1.6.0 // indirect
 	google.golang.org/genproto v0.0.0-20190605220351-eb0b1bdb6ae6 // indirect
-	google.golang.org/grpc v1.21.1 // indirect
+	google.golang.org/grpc v1.21.1
 	honnef.co/go/tools v0.0.0-20190605142022-0a11fc526260 // indirect
 )
 

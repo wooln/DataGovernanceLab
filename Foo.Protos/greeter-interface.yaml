@@ -1,0 +1,11 @@
+ type: google.api.Service
+ config_version: 3
+
+ http:
+   rules:
+   - selector: Foo.Contracts.Greeter.SayHello
+     post: /v1/foo/SayHello
+     body: "*"
+   - selector: Foo.Contracts.Greeter.SayHelloAgain
+     post: /v1/foo/SayHelloAgain
+     body: "*"
