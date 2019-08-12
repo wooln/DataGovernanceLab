@@ -34,5 +34,5 @@ protoc ./Foo.Protos/*.proto \
 
 
 #4，运行rpc server和http josn webapi后post请求进行测试
-#curl -X POST -k http://localhost:8081/v1/foo/SayHello -d '{"Name":" Lilyily"}'
+#curl -X POST -k http://localhost:8081/v1/foo/SayHello -d '{ "name":" Lily"}'
 

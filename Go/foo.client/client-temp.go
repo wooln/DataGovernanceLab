@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	address     = "localhost:50051"
-	defaultName = "Lily"
+	address     = "localhost:54099"
+	defaultName = "world"
 )
 
 func main() {
