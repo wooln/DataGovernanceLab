@@ -69,7 +69,7 @@ namespace Library.ServiceTool
         {
             if (_zooKeeper == null)
             {
-                _zooKeeper = new ZookeeperClient(new ZookeeperClientOptions("127.0.0.1:2181"));
+                _zooKeeper = new ZookeeperClient(new ZookeeperClientOptions("localhost:2181"));
             }
             return _zooKeeper;
         }
